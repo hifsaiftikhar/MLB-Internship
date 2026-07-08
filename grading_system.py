@@ -1,9 +1,26 @@
 import json
 
+
+def get_valid_number(prompt, min_val=None, max_val=None, is_float=True):
+    while True:
+        try:
+            value = float(input(prompt)) if is_float else int(input(prompt))
+            if min_val is not None and value < min_val:
+                print(f"Must be at least {min_val}.")
+                continue
+            if max_val is not None and value > max_val:
+                print(f"Must be at most {max_val}.")
+                continue
+            return value
+        except ValueError:
+            print("Please enter a valid number.")
+
+
 class Student:
     def __init__(self, name, class_name):
         self.name = name
         self.class_name = class_name
+        self.student_id = (name, class_name)  # tuple: fixed identity, never changes
         self.subjects = {}
 
     def add_subject(self, subject_name, marks):
@@ -29,42 +46,25 @@ class Student:
 
 students = []
 
-while True:
-    try:
-        num_students = int(input("How many students? "))
-        if num_students > 0:
-            break
-        else:
-            print("Number of students must be greater than 0.")
-    except ValueError:
-        print("Please enter a valid whole number.")
+num_students = int(get_valid_number("How many students? ", min_val=1, is_float=False))
 
 for i in range(num_students):
     name = input("Enter student name: ").strip()
     class_name = input("Enter class: ").strip()
     student = Student(name, class_name)
 
-    while True:
-        try:
-            num_subjects = int(input(f"How many subjects for {name}? "))
-            if num_subjects > 0:
-                break
-            else:
-                print("Number of subjects must be greater than 0.")
-        except ValueError:
-            print("Please enter a valid whole number.")
+    num_subjects = int(get_valid_number(f"How many subjects for {name}? ", min_val=1, is_float=False))
+
+    entered_subjects = set()  # tracks subject names already entered, prevents silent duplicates
 
     for j in range(num_subjects):
         subject_name = input("Enter subject name: ").strip()
-        while True:
-            try:
-                marks = float(input(f"Enter marks for {subject_name}: "))
-                if 0 <= marks <= 100:
-                    break
-                else:
-                    print("Marks must be between 0 and 100. Try again.")
-            except ValueError:
-                print("Please enter a valid number.")
+        if subject_name in entered_subjects:
+            print(f"{subject_name} already entered for this student. Skipping duplicate.")
+            continue
+        entered_subjects.add(subject_name)
+
+        marks = get_valid_number(f"Enter marks for {subject_name}: ", min_val=0, max_val=100)
         student.add_subject(subject_name, marks)
 
     students.append(student)
