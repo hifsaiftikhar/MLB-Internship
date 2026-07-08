@@ -48,3 +48,6 @@ The Student class stores each student's name, class, and subjects (as a dictiona
 ## Author
 
 Hifsa Iftikhar
+
+## Future Improvements
+- Add unit tests for average and grade calculation
