@@ -4,7 +4,12 @@ def add_student(students):
     if roll in students:
         print("A student with this roll number already exists.")
     else:
-        name = input("Enter name: ")
+        while True:
+            name = input("Enter name: ").strip()
+            if name:
+                break
+            else:
+                print("Name cannot be blank.")
         
         while True:
             try:
@@ -16,9 +21,16 @@ def add_student(students):
             except ValueError:
                 print("Please enter a valid whole number for age.")
         
-        course = input("Enter course: ")
+        while True:
+            course = input("Enter course: ").strip()
+            if course:
+                break
+            else:
+                print("Course cannot be blank.")
+        
         students[roll] = {"name": name, "age": age, "course": course}
         print(f"Student {name} added successfully.")
+
 
 def view_students(students):
     if not students:
@@ -28,8 +40,9 @@ def view_students(students):
     for roll, details in students.items():
         print(f"Roll: {roll}, Name: {details['name']}, Age: {details['age']}, Course: {details['course']}")
 
+
 def search_student(students):
-    roll = int(input("Enter roll number to search: "))
+    roll = input("Enter roll number to search: ").strip()
     
     if roll in students:
         details = students[roll]
@@ -37,8 +50,9 @@ def search_student(students):
     else:
         print("Student not found.")
 
+
 def update_student(students):
-    roll = int(input("Enter roll number to update: "))
+    roll = input("Enter roll number to update: ").strip()
     
     if roll not in students:
         print("Student not found.")
@@ -48,22 +62,31 @@ def update_student(students):
     choice = input("Enter choice (1/2/3): ")
     
     if choice == "1":
-        new_name = input("Enter new name: ")
-        students[roll]["name"] = new_name
-    elif choice == "2":
-     while True:
-        try:
-            new_age = int(input("Enter new age: "))
-            if new_age > 0:
+        while True:
+            new_name = input("Enter new name: ").strip()
+            if new_name:
                 break
             else:
-                print("Age must be a positive number.")
-        except ValueError:
-            print("Please enter a valid whole number for age.")
+                print("Name cannot be blank.")
+        students[roll]["name"] = new_name
+    elif choice == "2":
+        while True:
+            try:
+                new_age = int(input("Enter new age: "))
+                if new_age > 0:
+                    break
+                else:
+                    print("Age must be a positive number.")
+            except ValueError:
+                print("Please enter a valid whole number for age.")
         students[roll]["age"] = new_age
-
     elif choice == "3":
-        new_course = input("Enter new course: ")
+        while True:
+            new_course = input("Enter new course: ").strip()
+            if new_course:
+                break
+            else:
+                print("Course cannot be blank.")
         students[roll]["course"] = new_course
     else:
         print("Invalid choice.")
@@ -71,14 +94,16 @@ def update_student(students):
     
     print("Student updated successfully.")
 
+
 def delete_student(students):
-    roll = int(input("Enter roll number to delete: "))
+    roll = input("Enter roll number to delete: ").strip()
     
     if roll in students:
         del students[roll]
         print("Student deleted successfully.")
     else:
         print("Student not found.")
+
 
 def main():
     students = {}
@@ -112,5 +137,6 @@ def main():
             break
         else:
             print("Invalid choice. Try again.")
+
 
 main()
