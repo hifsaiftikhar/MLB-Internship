@@ -63,3 +63,7 @@ I used a dictionary keyed by roll number instead of a list of dictionaries. Sinc
 - practice_problems.py: all list, tuple, set, and dictionary practice problems
 - student_record_system.py: Student Record Management System
 - README.md: this file
+
+## Author
+
+Hifsa Iftikhar
