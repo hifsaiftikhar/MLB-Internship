@@ -3,5 +3,10 @@
         "name": "hifsa",
         "age": 21,
         "course": "maths"
+    },
+    "y678": {
+        "name": "hifsa",
+        "age": 20,
+        "course": "maths"
     }
 }

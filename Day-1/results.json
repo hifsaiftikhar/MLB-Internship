@@ -1,20 +1,20 @@
 [
     {
-        "name": "hifsa",
-        "class": "8",
+        "name": "ali",
+        "class": "7",
         "subjects": {
-            "chemistry": 89.0,
-            "physics": 98.0
+            "phy": 89.0,
+            "chem": 98.0
         },
         "average": 93.5,
         "grade": "A"
     },
     {
         "name": "sara",
-        "class": "7",
+        "class": "8",
         "subjects": {
-            "maths": 98.0,
-            "english": 78.0
+            "bio": 78.0,
+            "maths": 98.0
         },
         "average": 88.0,
         "grade": "B"
