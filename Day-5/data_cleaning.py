@@ -9,8 +9,7 @@ print("Original dataset shape:", df.shape)
 print("\nMissing values per column before cleaning:")
 print(df.isnull().sum())
 
-# Fill missing marks with the average of that subject, so one missing value
-# doesn't remove a whole student's record from the analysis.
+# Fill missing marks with the average of that subject
 subjects = ["Math", "Python", "Machine_Learning", "Statistics"]
 for subject in subjects:
     df[subject] = df[subject].fillna(df[subject].mean())
