@@ -33,8 +33,6 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # 5. Evaluate using Accuracy, Precision, Recall, F1-Score
-# average="macro" treats all three flower classes equally, regardless of
-# how many samples of each class are in the test set.
 accuracy = accuracy_score(y_test, y_pred)
 precision = precision_score(y_test, y_pred, average="macro")
 recall = recall_score(y_test, y_pred, average="macro")
