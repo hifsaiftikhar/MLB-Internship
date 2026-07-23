@@ -8,15 +8,11 @@ from sklearn.preprocessing import StandardScaler
 iris = load_iris()
 X = iris.data  # features only - K-Means never sees the species labels
 
-# Scale the features so no single feature (like petal length, which has a
-# wider range) dominates the distance calculations K-Means relies on.
+# Scale the features so no single feature dominates the distance calculations K-Means relies on.
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# 2. Elbow Method: try a range of K values and record the inertia
-# (inertia = sum of squared distances from each point to its cluster center;
-# it always decreases as K increases, so we look for the point where adding
-# more clusters stops giving a meaningful improvement - the "elbow").
+# 2. Elbow Method
 inertia_values = []
 k_range = range(1, 11)
 
@@ -37,8 +33,7 @@ plt.savefig("elbow_method.png")
 plt.close()
 print("Elbow method chart saved as elbow_method.png")
 
-# 3. Based on the elbow chart, K=3 is the chosen number of clusters
-# (this matches the fact that Iris genuinely has 3 species).
+# 3. Based on the elbow chart, K=3 (this matches the fact that Iris genuinely has 3 species).
 optimal_k = 3
 kmeans_final = KMeans(n_clusters=optimal_k, random_state=42, n_init=10)
 clusters = kmeans_final.fit_predict(X_scaled)
@@ -47,8 +42,7 @@ print(f"\nApplied K-Means with K={optimal_k}")
 print("Cluster sizes:")
 print(pd.Series(clusters).value_counts().sort_index())
 
-# 4. Visualize the clusters using two features (petal length and petal width,
-# which separate the three Iris species most clearly)
+# 4. Visualize the clusters using two features (petal length and petal width)
 plt.figure(figsize=(8, 6))
 scatter = plt.scatter(X[:, 2], X[:, 3], c=clusters, cmap="viridis")
 plt.title(f"K-Means Clusters (K={optimal_k}) - Petal Length vs Petal Width")
