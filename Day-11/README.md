@@ -29,6 +29,12 @@ Conv2D (32 filters) -> MaxPooling2D -> Conv2D (64 filters) -> MaxPooling2D -> Fl
 
 The second convolution block lets the network build on the simple features detected by the first block (like edges) to recognize more complex shapes, which is part of why the mini project's CNN performed slightly better than the single-block practice version.
 
+## Sample images and dataset exploration
+
+Both scripts display sample training images before training begins:
+- practice_sample_images.png (from cnn_practice.py): 10 sample training images with their true labels, confirming the dataset loaded and displayed correctly before any preprocessing.
+- sample_images.png (from fashion_mnist_cnn_classifier.py): the same kind of check for the mini project, showing 10 labeled clothing images from the training set.
+
 ## Final training and testing accuracy
 
 **cnn_practice.py** (single conv block, 5 epochs):
@@ -42,6 +48,9 @@ The second convolution block lets the network build on the simple features detec
 - Final Test Loss: 0.2898
 
 Graphs and confusion matrix (see training_accuracy_loss.png and confusion_matrix.png):
+
+training_accuracy_loss.png contains two side-by-side charts: the left plot shows training vs validation accuracy across all 10 epochs, and the right plot shows training vs validation loss across the same 10 epochs. Both curves for accuracy trend upward together, and both curves for loss trend downward together, which is the expected, healthy pattern for a model that is learning without badly overfitting.
+
 - The accuracy/loss curves show both training and validation accuracy improving steadily across the 10 epochs, with validation accuracy leveling off around epoch 7-8 while training accuracy kept climbing slightly further - a mild, expected gap rather than a sign of serious overfitting.
 - The confusion matrix shows the model does very well on visually distinct classes (Trouser, Bag, Ankle boot), but confuses visually similar classes more often - particularly Shirt vs T-shirt/top and Shirt vs Pullover/Coat, which makes sense since these categories can look quite similar in a low-resolution grayscale image.
 
