@@ -6,11 +6,9 @@ from sklearn.decomposition import PCA
 # 1. Load the dataset
 iris = load_iris()
 X = iris.data
-y = iris.target  # true species labels, used here only to color the plot for comparison
+y = iris.target  
 
-# Scale the features before PCA - PCA is sensitive to feature scale, since it
-# looks for directions of maximum variance, and a feature with a larger raw
-# range would otherwise dominate the result.
+# Scale the features before PCA - PCA is sensitive to feature scale
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 

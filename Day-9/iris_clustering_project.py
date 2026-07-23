@@ -10,7 +10,7 @@ print("===== IRIS FLOWER CLUSTERING & VISUALIZATION =====\n")
 # 1. Load the Iris dataset
 iris = load_iris()
 X = iris.data
-y = iris.target  # true species labels - used only afterward, to check how well clustering matched them
+y = iris.target  # true species labels 
 
 # 2. Convert to a Pandas DataFrame and explore
 df = pd.DataFrame(X, columns=iris.feature_names)
@@ -60,8 +60,7 @@ pca = PCA(n_components=2)
 X_pca = pca.fit_transform(X_scaled)
 print(f"\nPCA variance retained: {sum(pca.explained_variance_ratio_) * 100:.2f}%")
 
-# 6. Visualize: original data, K-Means clusters, and PCA-transformed data,
-# side by side for direct comparison
+# 6. Visualize: original data, K-Means clusters, and PCA-transformed data
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
 # Original data (petal length vs petal width), colored by true species
