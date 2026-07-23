@@ -34,8 +34,7 @@ X_test = X_test / 255.0
 print(f"Pixel range after normalization: {X_train.min()} to {X_train.max()}")
 
 # CNNs expect a channel dimension (height, width, channels). Fashion MNIST
-# images are grayscale, so we add a channel dimension of 1 -
-# from (28, 28) to (28, 28, 1) - rather than 3 (which would be for RGB).
+# images are grayscale, so add a channel dimension of 1 -from (28, 28) to (28, 28, 1) - rather than 3 (which would be for RGB).
 X_train_cnn = X_train.reshape(-1, 28, 28, 1)
 X_test_cnn = X_test.reshape(-1, 28, 28, 1)
 print("Reshaped for CNN input:", X_train_cnn.shape)
@@ -50,21 +49,17 @@ model = keras.Sequential([
     # detect local patterns like edges and textures. 32 filters, each 3x3.
     layers.Conv2D(32, kernel_size=(3, 3), activation="relu", name="conv_layer"),
 
-    # Max Pooling Layer: shrinks each feature map by keeping only the
-    # strongest (maximum) value in each small region, reducing size while
+    # Max Pooling Layer: shrinks each feature map by keeping only the strongest (maximum) value in each small region, reducing size while
     # keeping the most important detected features.
     layers.MaxPooling2D(pool_size=(2, 2), name="pool_layer"),
 
-    # Flatten Layer: converts the 2D feature maps into a 1D vector so they
-    # can be passed into standard Dense layers.
+    # Flatten Layer: converts the 2D feature maps into a 1D vector 
     layers.Flatten(name="flatten_layer"),
 
-    # Dense (Fully Connected) Layer: learns to combine the extracted features
-    # to make a classification decision.
+    # Dense (Fully Connected) Layer: learns to combine the extracted features to make a classification decision.
     layers.Dense(64, activation="relu", name="dense_layer"),
 
-    # Output Layer: 10 neurons (one per clothing category), Softmax gives a
-    # probability distribution across all classes.
+    # Output Layer: 10 neurons (one per clothing category), Softmax gives a probability distribution across all classes.
     layers.Dense(10, activation="softmax", name="output_layer"),
 ])
 
