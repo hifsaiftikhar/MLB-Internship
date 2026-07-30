@@ -11,10 +11,8 @@ else:
     height, width = img.shape[:2]
     print(f"Original size: {width} x {height}")
 
-    # Cropping in OpenCV is just slicing the image array:
-    # img[y_start:y_end, x_start:x_end]
-    # Note the order: ROWS (height/y) come first, then COLUMNS (width/x) -
-    # opposite of how we normally think of (x, y) coordinates.
+    # Cropping is just array slicing: img[y_start:y_end, x_start:x_end]
+    # Rows (height/y) come first, then columns (width/x).
 
     # 1. Top-left quarter
     top_left = img[0:height // 2, 0:width // 2]

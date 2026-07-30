@@ -15,8 +15,7 @@ def load_image(path):
 
 def to_grayscale(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Convert back to 3-channel so it can still be saved/displayed
-    # consistently alongside color images in this same toolkit.
+    # Convert back to 3-channel for consistency with color images
     return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
 
 

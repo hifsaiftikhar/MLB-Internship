@@ -11,23 +11,20 @@ else:
     os.makedirs("output", exist_ok=True)
     height, width = img.shape[:2]
 
-    # Work on a copy so the original image stays untouched -
-    # cv2 drawing functions modify the array in place.
+    # Work on a copy so the original stays untouched
     canvas = img.copy()
 
-    # 1. Rectangle
-    # cv2.rectangle(image, top_left_point, bottom_right_point, color_BGR, thickness)
+    # Rectangle
     cv2.rectangle(canvas, (10, 10), (width // 3, height // 3), (0, 255, 0), 2)
 
-    # 2. Circle
-    # cv2.circle(image, center_point, radius, color_BGR, thickness)
+    # Circle
     center = (width // 2, height // 2)
     cv2.circle(canvas, center, min(width, height) // 6, (255, 0, 0), 2)
 
-    # 3. Line
+    # Line
     cv2.line(canvas, (0, height - 1), (width - 1, 0), (0, 0, 255), 2)
 
-    # 4. Polygon (a simple triangle here, using a set of points)
+    # Polygon (triangle)
     import numpy as np
     points = np.array([
         [width // 2, height - 10],
@@ -36,7 +33,7 @@ else:
     ], dtype=np.int32)
     cv2.polylines(canvas, [points], isClosed=True, color=(0, 255, 255), thickness=2)
 
-    # 5. Custom text: name and today's date
+    # Custom text: name and today's date
     today = date.today().strftime("%Y-%m-%d")
     text = f"Hifsa Iftikhar - {today}"
     cv2.putText(
