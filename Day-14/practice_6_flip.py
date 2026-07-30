@@ -9,10 +9,7 @@ if img is None:
 else:
     os.makedirs("output", exist_ok=True)
 
-    # cv2.flip(img, flip_code):
-    # flip_code = 1  -> horizontal flip (mirror left-right)
-    # flip_code = 0  -> vertical flip (mirror top-bottom)
-    # flip_code = -1 -> both at once (180-degree-like flip on both axes)
+    # cv2.flip(img, flip_code): 1=horizontal, 0=vertical, -1=both
 
     flipped_horizontal = cv2.flip(img, 1)
     cv2.imwrite("output/flipped_horizontal.jpg", flipped_horizontal)
@@ -26,6 +23,5 @@ else:
     cv2.imwrite("output/flipped_both.jpg", flipped_both)
     print("Both-axis flip saved (mirrored left-right AND top-bottom).")
 
-    print("\nNote: dimensions stay exactly the same for all flips - "
-          "only the pixel arrangement changes, unlike rotation by 90/270 "
-          "which swaps width and height.")
+    print("\nDimensions stay the same for all flips - unlike rotation "
+          "by 90/270 which swaps width and height.")

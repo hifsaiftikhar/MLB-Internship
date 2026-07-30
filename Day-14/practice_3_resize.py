@@ -11,9 +11,8 @@ else:
     original_height, original_width = img.shape[:2]
     print(f"Original size: {original_width} x {original_height}")
 
-    # Resize to a few different fixed resolutions.
-    # cv2.resize takes (width, height) - note this is the OPPOSITE order
-    # from img.shape, which gives (height, width). Easy to mix up.
+    # Resize to a few fixed resolutions.
+    # cv2.resize takes (width, height) - opposite order from img.shape.
     sizes = {
         "small": (150, 100),
         "medium": (400, 300),
@@ -26,7 +25,7 @@ else:
         cv2.imwrite(output_path, resized)
         print(f"Resized to {w}x{h} -> saved as {output_path}")
 
-    # Resize by scale factor instead of fixed size (e.g., 50% smaller)
+    # Resize by scale factor instead of fixed size
     scale = 0.5
     scaled = cv2.resize(img, None, fx=scale, fy=scale)
     scaled_h, scaled_w = scaled.shape[:2]

@@ -11,8 +11,7 @@ else:
     original_h, original_w = img.shape[:2]
     print(f"Original size: {original_w} x {original_h}")
 
-    # OpenCV has built-in constants for the 3 most common fixed rotations,
-    # which is simpler and faster than computing a rotation matrix manually.
+    # OpenCV has built-in constants for these 3 fixed rotations.
 
     # 90 degrees clockwise
     rotated_90 = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)

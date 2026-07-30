@@ -5,6 +5,8 @@ import numpy as np
 import cv2
 import gradio as gr
 
+# Resolve paths relative to this script's location, so examples work
+# regardless of the launch directory.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def resolve(filename):
@@ -31,9 +33,8 @@ def process_image(input_image, operation, resize_w, resize_h, rotate_choice,
         return None, "Invalid file. Please upload a valid image."
 
     try:
-        # Gradio gives images in RGB; OpenCV's functions here work fine on
-        # RGB arrays directly (color order doesn't affect geometric ops
-        # like resize/rotate/flip/crop, only color-specific ones).
+        # Gradio gives images in RGB - fine for geometric ops (resize,
+        # rotate, flip, crop), which don't depend on channel order.
         img = input_image.copy()
 
         if operation == "Grayscale":
@@ -96,8 +97,7 @@ def process_image(input_image, operation, resize_w, resize_h, rotate_choice,
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2, cv2.LINE_AA)
 
         elif operation == "Brightness/Contrast":
-            # brightness added directly; contrast scales pixel values around
-            # their midpoint. alpha=contrast (1.0 = no change), beta=brightness
+            # alpha=contrast (1.0=no change), beta=brightness
             alpha = float(contrast)
             beta = float(brightness)
             result = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
