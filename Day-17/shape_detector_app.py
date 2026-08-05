@@ -76,8 +76,13 @@ with gr.Blocks(title="Shape Detection System", theme=gr.themes.Soft(primary_hue=
 
     input_image = gr.Image(type="numpy", label="Upload an image")
 
-    examples = [resolve(f"input/sample{i}.jpg") for i in (1, 2, 3)
-                if os.path.exists(resolve(f"input/sample{i}.jpg"))]
+    examples = []
+    for i in (1, 2, 3):
+        for ext in (".jpg", ".png", ".jpeg"):
+            path = resolve(f"input/sample{i}{ext}")
+            if os.path.exists(path):
+                examples.append(path)
+                break
     gr.Examples(examples=[[p] for p in examples], inputs=input_image, label="Try a sample image")
 
     output_image = gr.Image(type="numpy", label="Detected Shapes")
