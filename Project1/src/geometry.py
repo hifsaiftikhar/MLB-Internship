@@ -71,3 +71,13 @@ def is_center_in_slot(points, bbox):
     contour = np.array(points, dtype=np.float32)
     result = cv2.pointPolygonTest(contour, (cx, cy), False)
     return result >= 0
+
+def shrink_polygon(points, factor=0.75):
+    """
+    Shrink the polygon points inward toward its centroid.
+    Helps avoid selecting slot boundary lines for traditional CV edge calculations.
+    """
+    poly = np.array(points, dtype=np.float32)
+    centroid = np.mean(poly, axis=0)
+    shrunk_poly = centroid + factor * (poly - centroid)
+    return shrunk_poly.astype(np.int32).tolist()

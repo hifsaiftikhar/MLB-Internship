@@ -2,9 +2,8 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 import src.config as config
-from src.geometry import calculate_overlap_ios
 from src.traditional_cv import run_traditional_cv_pipeline, calculate_slot_density
-from src.geometry import calculate_overlap_ios, is_center_in_slot
+from src.geometry import calculate_overlap_ios, is_center_in_slot, shrink_polygon
 
 class ParkingOccupancyDetector:
     def __init__(self, model_name=config.YOLO_MODEL_NAME):
@@ -12,7 +11,7 @@ class ParkingOccupancyDetector:
         print(f"Loading YOLO model: {model_name}...")
         self.model = YOLO(model_name)
         
-    def detect_vehicles(self, frame, conf_threshold=0.25):
+    def detect_vehicles(self, frame, conf_threshold=0.10):
         """
         Run YOLO inference and filter predictions to keep only vehicle class IDs.
         Returns a list of bboxes: [x_min, y_min, x_max, y_max, confidence, class_id]
@@ -54,7 +53,9 @@ class ParkingOccupancyDetector:
             slot_id = slot["id"]
             points = slot["points"]
             
-            cv_density = calculate_slot_density(dilated_edges, points)
+            # Shrink points to exclude slot boundary lines from classical edge count
+            shrunk_points = shrink_polygon(points, factor=config.SHRINK_FACTOR)
+            cv_density = calculate_slot_density(dilated_edges, shrunk_points)
             
             center_match = False
             max_overlap = 0.0
