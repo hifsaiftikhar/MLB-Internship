@@ -17,11 +17,14 @@ SLOTS_CONFIG_PATH = os.path.join(DATA_DIR, "parking_slots.json")
 # Traditional CV Pipeline Parameters
 CLAHE_CLIP_LIMIT = 2.0
 CLAHE_GRID_SIZE = (8, 8)
-GAUSSIAN_BLUR_KERNEL = (3, 3)
+GAUSSIAN_BLUR_KERNEL = (5, 5)
 CANNY_LOW_THRESHOLD = 50
 CANNY_HIGH_THRESHOLD = 150
 MORPHOLOGY_KERNEL_SIZE = (3, 3)
 MORPHOLOGY_ITERATIONS = 1
+
+# Shrink slot polygon inward for edge density check (avoids boundary lines)
+SHRINK_FACTOR = 0.75
 
 # Occupancy Decisions
 CV_OCCUPANCY_THRESHOLD = 0.10
@@ -31,3 +34,4 @@ CV_FALLBACK_THRESHOLD = 0.18
 YOLO_MODEL_NAME = "yolov8n.pt"
 VEHICLE_CLASS_IDS = [2, 3, 5, 7]   # COCO Classes: 2=car, 3=motorcycle, 5=bus, 7=truck
 YOLO_OVERLAP_THRESHOLD = 0.35
+YOLO_CONFIDENCE_THRESHOLD = 0.10  
