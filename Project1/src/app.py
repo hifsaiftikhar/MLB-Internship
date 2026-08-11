@@ -18,7 +18,7 @@ from src.geometry import points_to_array
 st.set_page_config(
     page_title="Smart Parking Lot Occupancy Analyzer",
     page_icon="🚗",
-    layout="wide"
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
