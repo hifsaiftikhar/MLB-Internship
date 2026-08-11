@@ -6,7 +6,7 @@ This project was built to demonstrate a complete computer vision application, co
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 1. **Hybrid Occupancy Decision Logic**: Integrates deep learning predictions with low-level edge texture analysis to create a robust double-check classification system.
 2. **Perspective-Correct Coordinate Selection**: Supports arbitrary 4-point quadrilateral definitions for parking spots, making it robust to slanted lines and camera perspective warping.
@@ -20,7 +20,7 @@ This project was built to demonstrate a complete computer vision application, co
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 Project1/
@@ -57,7 +57,7 @@ Project1/
 
 ---
 
-## 📊 Dataset & Reference Materials
+##  Dataset & Reference Materials
 
 This project is built using standard benchmarks from the computer vision community:
 * **Primary Reference Image/Video**: Originally from [Murtaza's Computer Vision Zone - Car Parking Space Detection](https://github.com/murtazahassan/Car-Park-Space-Detection).
@@ -67,7 +67,7 @@ This project is built using standard benchmarks from the computer vision communi
 
 ---
 
-## ⚙️ Setup & Installation
+##  Setup & Installation
 
 ### 1. Clone the Internship Repository
 ```bash
@@ -89,7 +89,7 @@ python scripts/download_assets.py
 
 ---
 
-## 🏃 Running the Application
+##  Running the Application
 
 ### Option A: Run the Streamlit Dashboard (Recommended)
 Launch the interactive web application to see KPIs, adjust thresholds, inspect individual spots, and run real-time video feeds:
@@ -118,7 +118,7 @@ python src/selector.py
 
 ---
 
-## 🌀 Hybrid Processing Workflow
+##  Hybrid Processing Workflow
 
 ```mermaid
 graph TD
@@ -156,7 +156,7 @@ graph TD
 
 ---
 
-## 📈 Results
+##  Results
 
 Running `src/main.py` yields the following performance outputs on `carParkImg.png`:
 
@@ -169,7 +169,7 @@ The pipeline steps and annotated output are successfully saved in the `results/`
 
 ---
 
-## 🛠️ Challenges Faced & Solutions
+##  Challenges Faced & Solutions
 
 1. **Shadows and Light Shifts**:
    - *Challenge*: Bright daylight creates deep shadows that trick traditional thresholding and obscure YOLO features.
@@ -183,7 +183,7 @@ The pipeline steps and annotated output are successfully saved in the `results/`
 
 ---
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 1. **Temporal Filtering**: Implement temporal voting (moving average or Kalman filter) across multiple frames to eliminate state flickering in video feeds.
 2. **Automated Parking Slot Initialization**: Train a deep segmentation network (such as Segment Anything Model or U-Net) to automatically segment parking bays, eliminating the need for manual calibration.
