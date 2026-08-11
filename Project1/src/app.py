@@ -6,15 +6,7 @@ import os
 import time
 from PIL import Image
 import sys
-from ultralytics import YOLO
-import os
 
-if not os.path.exists("yolov8n.pt"):
-    import urllib.request
-    urllib.request.urlretrieve(
-        "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolovn.pt",
-        "yolov8n.pt"
-    )
 # Ensure project directories are in python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -26,7 +18,7 @@ from src.geometry import points_to_array
 st.set_page_config(
     page_title="Smart Parking Lot Occupancy Analyzer",
     page_icon="🚗",
-    layout="wide",
+    layout="wide
     initial_sidebar_state="expanded"
 )
 
