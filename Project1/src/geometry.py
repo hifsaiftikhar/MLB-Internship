@@ -61,3 +61,13 @@ def is_point_inside_polygon(point, poly_points):
     poly_pts = np.array(poly_points, dtype=np.int32).reshape((-1, 1, 2))
     dist = cv2.pointPolygonTest(poly_pts, (float(point[0]), float(point[1])), False)
     return dist >= 0
+
+def is_center_in_slot(points, bbox):
+    """Check if center of YOLO bbox falls inside slot polygon."""
+    x1, y1, x2, y2 = bbox
+    cx = (x1 + x2) / 2
+    cy = (y1 + y2) / 2
+    
+    contour = np.array(points, dtype=np.float32)
+    result = cv2.pointPolygonTest(contour, (cx, cy), False)
+    return result >= 0
