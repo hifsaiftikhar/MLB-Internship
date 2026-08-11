@@ -4,6 +4,7 @@ from ultralytics import YOLO
 import src.config as config
 from src.geometry import calculate_overlap_ios
 from src.traditional_cv import run_traditional_cv_pipeline, calculate_slot_density
+from src.geometry import calculate_overlap_ios, is_center_in_slot
 
 class ParkingOccupancyDetector:
     def __init__(self, model_name=config.YOLO_MODEL_NAME):
@@ -55,25 +56,24 @@ class ParkingOccupancyDetector:
             
             cv_density = calculate_slot_density(dilated_edges, points)
             
+            center_match = False
             max_overlap = 0.0
-            best_vehicle = None
             
             for vehicle in vehicles:
                 bbox = vehicle[:4]
+                if is_center_in_slot(points, bbox):
+                    center_match = True
+                    break
                 overlap = calculate_overlap_ios(points, bbox)
                 if overlap > max_overlap:
                     max_overlap = overlap
-                    best_vehicle = vehicle
             
             is_occupied = False
             decision_reason = "Vacant"
             
-            if max_overlap >= yolo_overlap_thresh:
+            if center_match:
                 is_occupied = True
-                decision_reason = f"YOLO (Overlap: {max_overlap:.2f})"
-            elif max_overlap >= 0.10 and cv_density >= cv_thresh:
-                is_occupied = True
-                decision_reason = f"Hybrid (YOLO: {max_overlap:.2f}, CV: {cv_density:.2f})"
+                decision_reason = f"YOLO Center Point Match"
             elif cv_density >= cv_fallback_thresh:
                 is_occupied = True
                 decision_reason = f"CV Fallback (CV: {cv_density:.2f})"
