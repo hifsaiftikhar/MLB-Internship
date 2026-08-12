@@ -1,190 +1,134 @@
 # Smart Parking Lot Occupancy Analyzer
 
-A professional-grade computer vision system designed to monitor and classify parking space occupancy in real time. This system combines **traditional image processing pipelines (OpenCV)** with **deep learning object detection (YOLOv8)** to deliver highly accurate occupancy classifications, even in challenging conditions such as perspective distortion, lighting variations, and occlusion.
+A computer vision system that analyzes a parking lot image or video and determines which parking spaces are occupied and which are vacant. It combines YOLOv8 object detection with a traditional OpenCV preprocessing pipeline (grayscale, CLAHE contrast enhancement, Gaussian blur, Canny edge detection, morphological dilation), so the occupancy decision doesn't rely on a single method.
 
-This project was built to demonstrate a complete computer vision application, combining fundamental image preprocessing, edge detection, and morphological operations with modern deep learning.
+## Project overview
 
----
+Given a static camera view of a parking lot, the system:
+1. Detects vehicles in the frame using a pretrained YOLOv8 model.
+2. Compares each predefined parking slot against detected vehicles to measure overlap.
+3. Cross-checks uncertain or missed detections using a traditional CV edge-density pipeline.
+4. Classifies every slot as occupied or vacant based on a combination of both signals.
+5. Displays the result as a color-coded overlay (green = vacant, red = occupied) along with occupancy statistics.
 
-##  Key Features
+## Dataset used
 
-1. **Hybrid Occupancy Decision Logic**: Integrates deep learning predictions with low-level edge texture analysis to create a robust double-check classification system.
-2. **Perspective-Correct Coordinate Selection**: Supports arbitrary 4-point quadrilateral definitions for parking spots, making it robust to slanted lines and camera perspective warping.
-3. **Interactive Streamlit Dashboard**: Offers an interactive web UI featuring:
-   - High-level KPIs (Total slots, Occupied, Vacant, Occupancy %).
-   - Real-time video processing and image inference overlays.
-   - Interactive sliders for fine-tuning thresholds (Canny edges, morphological kernels, YOLO confidence, and overlaps).
-   - A step-by-step OpenCV pipeline visualization tab.
-   - A detailed slot diagnostics inspector tool.
-4. **Clean & Modular Structure**: Adheres to strict clean code principles, segregating configuration, geometry math, classical image processing, and deep learning detectors.
+Reference image and video from Murtaza's Computer Vision Zone Car Parking Space Detection project (https://github.com/murtazahassan/Car-Park-Space-Detection).
 
----
+Suggested public datasets for extending this project: PKLot Dataset on Roboflow Universe (12,416 surveillance frames across varying weather conditions), and the CNR-Park Dataset (about 150,000 labeled occupancy images).
 
-##  Project Structure
+## Project workflow
+
+**1. Parking slot definition (selector.py)**
+Since the camera is static, parking slots are defined once and reused, rather than re-detected on every frame. I built an interactive tool where you click 4 corner points per slot (in order), and it saves the coordinates to a JSON config file. This supports angled, non-rectangular slots, not just straight rectangles, which matters for slots near the edge of a wide-angle camera view where perspective distorts their shape.
+
+**2. Vehicle detection (detector.py)**
+Uses a pretrained YOLOv8 model to detect vehicles (car, truck, bus, motorcycle) in the frame - no custom training needed, since these are already standard COCO classes.
+
+**3. Traditional CV pipeline (traditional_cv.py)**
+Grayscale conversion, then CLAHE (adaptive contrast enhancement, better than simple brightness/contrast scaling for handling uneven outdoor lighting and shadows), Gaussian blur, Canny edge detection, and morphological dilation to close small gaps in detected edges.
+
+**4. Occupancy decision (geometry.py + detector.py)**
+For each slot, I calculate Intersection over Slot (IoS) - what fraction of the slot's area is covered by a detected vehicle's bounding box, using pixel masks so it works correctly with non-rectangular slot polygons, not just axis-aligned rectangles.
+
+The decision combines both signals rather than relying on YOLO alone:
+- If IoS is high (>= 0.35), the slot is marked occupied - YOLO confirmed.
+- If IoS is moderate (0.10-0.35) and the CV edge density inside the slot is also elevated, it's marked occupied - this catches cases where YOLO's detection is weak or partial.
+- If YOLO misses the vehicle entirely (IoS < 0.10) but edge density is high, it's still marked occupied - this is the CV fallback, meant to catch cases where a shadow, camera angle, or partial occlusion causes YOLO to miss a car that traditional edge analysis can still pick up on.
+- Otherwise, the slot is marked vacant.
+
+**5. Visualization and statistics (main.py / app.py)**
+Draws each slot's outline and a semi-transparent fill (green/red), labels it with its ID, and reports total slots, occupied count, vacant count, and occupancy percentage.
+
+## Technologies used
+
+- Python, OpenCV
+- Ultralytics YOLOv8 (pretrained, no custom training)
+- NumPy
+- Streamlit (interactive dashboard)
+
+## The Streamlit dashboard (app.py)
+
+Four tabs:
+- **Occupancy Dashboard** - runs the analysis on a static image or a video feed, shows the annotated result and live KPI cards (total/occupied/vacant/occupancy rate), with adjustable sliders for every threshold in the decision logic.
+- **CV Pipeline Steps** - shows each stage of the traditional CV pipeline side by side (grayscale, CLAHE, edges, dilation), so the intermediate processing is visible, not just the final result.
+- **Detail Slot Inspector** - pick any individual slot by ID and see a cropped close-up of just that slot, its edge mask, and the exact numbers (IoS value, edge density, which rule triggered the decision) that led to its classification.
+- **Technical Documentation** - explains the IoS and edge density formulas and the decision rules in the app itself.
+
+## Results
+
+Running the pipeline on the reference parking lot image (69 predefined slots):
+- Total parking slots: 69
+- Occupied: 28
+- Vacant: 41
+- Occupancy rate: 40.58%
+
+Pipeline step images and the final annotated result are saved under results/.
+
+## Challenges faced
+
+- **Shadows and uneven lighting:** bright daylight creates deep shadows that can confuse both thresholding and YOLO's detections. Addressed by adding CLAHE as a preprocessing step before edge detection, which improves local contrast in shadowed regions specifically, rather than adjusting brightness uniformly across the whole image.
+- **Camera perspective distortion:** slots farther from the camera or near the frame edges are visibly skewed by the wide-angle lens, so plain axis-aligned rectangles don't match their real shape well. Solved by building a 4-point polygon selector instead of a simple rectangle tool, and using pixel-mask-based overlap calculations (via cv2.fillPoly) so the IoS calculation is accurate for any quadrilateral shape, not just upright rectangles.
+- **YOLO missing partially occluded vehicles:** cars partly hidden behind trees, or parked very close together, are sometimes missed by YOLO entirely. The CV fallback rule (high edge density even with no YOLO detection) was added specifically to catch these cases, rather than relying on YOLO as the sole source of truth.
+
+## Future improvements
+
+- Temporal filtering across video frames (e.g. a moving average or simple voting window) to prevent a slot's status from flickering between occupied/vacant on borderline frames.
+- Automated slot boundary detection using a segmentation model, to remove the need for manually clicking each slot's corners once per camera setup.
+- A small dedicated occupied-vs-vacant classifier trained specifically on cropped slot images, as a third signal alongside YOLO and the CV pipeline.
+
+## Project structure
 
 ```
 Project1/
-│
-├── data/
-│   ├── carParkImg.png             # Reference parking lot image
-│   ├── carPark.mp4                # Reference video stream feed
-│   └── parking_slots.json         # Coordinate configurations for 69 parking spaces
-│
-├── results/
-│   ├── annotated_image.png        # Sample output showing green/red overlays
-│   └── pipeline_steps/            # Traditional CV pipeline steps (pre-generated)
-│       ├── 01_grayscale.png
-│       ├── 02_clahe.png
-│       ├── 03_gaussian_blur.png
-│       ├── 04_canny_edges.png
-│       └── 05_morphology.png
-│
-├── scripts/
-│   └── download_assets.py         # Downloader script for sample image, video, and slot coordinates
-│
-├── src/
-│   ├── __init__.py
-│   ├── app.py                     # Streamlit Dashboard application
-│   ├── config.py                  # Thresholds, class IDs, and file path parameters
-│   ├── detector.py                # YOLO object detection & hybrid merger class
-│   ├── geometry.py                # Polygon operations and pixel-perfect IoS calculations
-│   ├── main.py                    # Orchestrator to run pipeline on static image and save outputs
-│   └── selector.py                # Interactive 4-point coordinate selector (OpenCV GUI)
-│
-├── requirements.txt               # Dependencies
-└── README.md                      # Documentation
+    data/
+        carParkImg.png          reference parking lot image
+        carPark.mp4             reference video
+        parking_slots.json      slot coordinates (69 slots)
+    results/
+        annotated_image.png     final output with occupancy overlay
+        pipeline_steps/         intermediate CV pipeline images
+    scripts/
+        download_assets.py      downloads/prepares the reference image, video, and slot data
+    src/
+        app.py                  Streamlit dashboard
+        config.py                paths, thresholds, class IDs
+        detector.py              YOLO detection + hybrid occupancy decision
+        geometry.py               polygon/overlap math (IoS calculation)
+        main.py                   command-line pipeline runner
+        selector.py                interactive slot corner selector tool
+    requirements.txt
+    README.md
 ```
 
----
+## Running the project
 
-##  Dataset & Reference Materials
-
-This project is built using standard benchmarks from the computer vision community:
-* **Primary Reference Image/Video**: Originally from [Murtaza's Computer Vision Zone - Car Parking Space Detection](https://github.com/murtazahassan/Car-Park-Space-Detection).
-* **Suggested Public Datasets**:
-  - [PKLot Dataset (Roboflow Universe)](https://universe.roboflow.com/brad-dwyer/pklot-1tros) - 12,416 surveillance camera frames in varying weather.
-  - [CNR-Park Dataset](http://cnrpark.it/) - Large-scale visual occupancy dataset containing ~150,000 labeled images.
-
----
-
-##  Setup & Installation
-
-### 1. Clone the Internship Repository
-```bash
-git clone <your-repository-url>
-cd MLB-Internship/Project1
+Install dependencies:
 ```
-
-### 2. Install Dependencies
-Make sure you have Python 3.8+ installed. Install the required libraries:
-```bash
 python -m pip install -r requirements.txt
 ```
 
-### 3. Download & Prepare Sample Assets
-Run the automated asset preparation script. This fetches the reference image, the reference video, and downloads the original coordinate positions, converting them into our 4-point quadrilateral JSON format.
-```bash
+Download/prepare reference assets:
+```
 python scripts/download_assets.py
 ```
 
----
-
-##  Running the Application
-
-### Option A: Run the Streamlit Dashboard (Recommended)
-Launch the interactive web application to see KPIs, adjust thresholds, inspect individual spots, and run real-time video feeds:
-```bash
+Run the dashboard:
+```
 python -m streamlit run src/app.py
 ```
-Open the provided URL (usually `http://localhost:8501`) in your web browser.
 
-### Option B: Run the Command-Line Analyzer
-Run the automated pipeline to analyze the default image, print stats, and generate output figures:
-```bash
+Run the command-line analyzer (prints stats, saves output images):
+```
 python src/main.py
 ```
-This prints the occupancy stats in the terminal and outputs the step-by-step pipeline images under `results/`.
 
-### Option C: Recalibrate Coordinates Interactively
-If you want to define your own parking slots or edit the preconfigured slots on a new image:
-```bash
+Define or edit parking slots interactively:
+```
 python src/selector.py
 ```
-* **Left Click**: Define 4 corners of a slot (clockwise: top-left, top-right, bottom-right, bottom-left).
-* **Right Click** (inside a slot): Remove that slot.
-* **Backspace / 'c'**: Cancel current drawing points.
-* **'s'**: Save slots to configuration.
-* **'q'**: Quit.
+Left click adds a corner (4 clicks per slot, clockwise). Right click inside a slot deletes it. Press 's' to save, 'q' to quit.
 
----
+## Author
 
-##  Hybrid Processing Workflow
-
-```mermaid
-graph TD
-    A[Raw Parking Lot Frame] --> B[YOLOv8 Object Detection]
-    A --> C[Traditional CV Pipeline]
-    
-    B --> B1[Detect Vehicle Bounding Boxes]
-    B1 --> B2[Filter: Car, Truck, Bus, Bike]
-    
-    C --> C1[Grayscale Conversion]
-    C1 --> C2[CLAHE Contrast Enhancement]
-    C2 --> C3[Gaussian Blur Filtering]
-    C3 --> C4[Canny Edge Detection]
-    C4 --> C5[Morphological Dilation]
-    
-    B2 --> D[Occupancy Merger Decision]
-    C5 --> D
-    
-    D --> E{Hybrid Rules Evaluation}
-    
-    E -->|IoS Overlap >= 0.35| F[Occupied: YOLO Confirmed]
-    E -->|0.10 <= IoS < 0.35 & Edge Density >= 0.10| G[Occupied: Hybrid Confirmed]
-    E -->|IoS < 0.10 & Edge Density >= 0.18| H[Occupied: CV Fallback]
-    E -->|Otherwise| I[Vacant]
-```
-
-1. **Contrast-Enhanced Edges**: Converts the frame to grayscale and applies CLAHE to normalise lighting and shadows. Applying Gaussian blur reduces noise, while Canny edge detection followed by morphological dilation isolates vehicle textures.
-2. **IoS Calculation (Intersection over Slot)**: Computes the pixel-level overlap ratio between each slot polygon and YOLO bboxes:
-   $$\text{IoS} = \frac{\text{Area}(\text{Slot} \cap \text{BBox})}{\text{Area}(\text{Slot})}$$
-3. **Double-Check Decision Fusing**:
-   - If YOLO detects a vehicle directly inside the slot, it is flagged as **Occupied**.
-   - If YOLO detects a vehicle with weak overlap (e.g. 15%), but traditional CV registers high edge density (e.g. wheels, bumpers, license plates), it is flagged as **Occupied** (Hybrid decision).
-   - If YOLO misses a car due to severe camera angles or lighting, but traditional CV registers edge density exceeding `0.18`, it is flagged as **Occupied** (CV Fallback).
-   - Otherwise, it is marked **Vacant**.
-
----
-
-##  Results
-
-Running `src/main.py` yields the following performance outputs on `carParkImg.png`:
-
-* **Total Parking Slots**: 69
-* **Occupied Spaces**: 28
-* **Vacant Spaces**: 41
-* **Occupancy Rate**: 40.58%
-
-The pipeline steps and annotated output are successfully saved in the `results/` directory, illustrating perfect segmentation and overlay tracking.
-
----
-
-##  Challenges Faced & Solutions
-
-1. **Shadows and Light Shifts**:
-   - *Challenge*: Bright daylight creates deep shadows that trick traditional thresholding and obscure YOLO features.
-   - *Solution*: Integrated CLAHE (Contrast Limited Adaptive Histogram Equalization) as a preprocessing block to improve localized contrast in shadows before Canny edges are computed.
-2. **Camera Perspective Distortion**:
-   - *Challenge*: Axis-aligned rectangular slots align poorly with outer-lying spaces due to wide-angle lens perspective distortion.
-   - *Solution*: Developed a 4-point quadrilateral polygon selector instead of standard bounding boxes. We evaluate overlaps using mask-based coordinate operations, ensuring pixel-perfect overlap calculations.
-3. **YOLO Detection Drops**:
-   - *Challenge*: Partial occlusions (e.g., a tree blocking a bumper or cars parked too close) cause YOLO to fail to detect a car.
-   - *Solution*: Created a hybrid fallback rule. If YOLO misses the vehicle but the local edge density is high, the traditional CV pipeline flags it as occupied, ensuring high recall.
-
----
-
-##  Future Improvements
-
-1. **Temporal Filtering**: Implement temporal voting (moving average or Kalman filter) across multiple frames to eliminate state flickering in video feeds.
-2. **Automated Parking Slot Initialization**: Train a deep segmentation network (such as Segment Anything Model or U-Net) to automatically segment parking bays, eliminating the need for manual calibration.
-3. **Local Slot Classifier**: Train a lightweight convolutional neural network (e.g., MobileNetV3) specifically on cropped slot images (Occupied vs. Vacant) to act as a third classifier node.
+Hifsa Iftikhar
