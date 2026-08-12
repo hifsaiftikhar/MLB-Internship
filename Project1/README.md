@@ -13,7 +13,7 @@ Given a static camera view of a parking lot, the system:
 
 ## Dataset used
 
-Reference image and video from Murtaza's Computer Vision Zone Car Parking Space Detection project (https://github.com/murtazahassan/Car-Park-Space-Detection).
+Reference image and video from Murtaza's Computer Vision Zone Car Parking Space Detection project
 
 Suggested public datasets for extending this project: PKLot Dataset on Roboflow Universe (12,416 surveillance frames across varying weather conditions), and the CNR-Park Dataset (about 150,000 labeled occupancy images).
 
