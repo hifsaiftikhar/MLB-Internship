@@ -59,9 +59,9 @@ Four tabs:
 
 Running the pipeline on the reference parking lot image (69 predefined slots):
 - Total parking slots: 69
-- Occupied: 28
-- Vacant: 41
-- Occupancy rate: 40.58%
+- Occupied: 54
+- Vacant: 15
+- Occupancy rate: 78.3%
 
 Pipeline step images and the final annotated result are saved under results/.
 
