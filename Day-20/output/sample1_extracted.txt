@@ -1,0 +1,10 @@
+=== RAW OCR: sample1.jpg ===
+PROPOSAL (conf: 1.00)
+BUSINESS (conf: 1.00)
+Plan (conf: 0.40)
+Pian (conf: 0.33)
+37 (conf: 0.47)
+
+=== PREPROCESSED OCR ===
+PROPOSAL (conf: 1.00)
+BUSINESS (conf: 1.00)

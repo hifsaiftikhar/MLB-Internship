@@ -1,0 +1,17 @@
+=== RAW OCR: sample12.jpg ===
+MAIN (conf: 1.00)
+ST (conf: 0.98)
+MAIN ST (conf: 0.83)
+400 W (conf: 0.99)
+CITY LIMITS (conf: 0.80)
+400 W (conf: 0.98)
+CITY LIMITS (conf: 0.92)
+
+=== PREPROCESSED OCR ===
+MAIN (conf: 1.00)
+ST. (conf: 0.48)
+MAIN ST, (conf: 0.40)
+400 W (conf: 0.98)
+CITY LIMITS (conf: 0.95)
+400 W (conf: 0.99)
+CITY LIMITS  (conf: 0.51)

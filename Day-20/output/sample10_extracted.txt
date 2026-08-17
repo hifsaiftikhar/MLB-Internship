@@ -1,0 +1,14 @@
+=== RAW OCR: sample10.jpg ===
+WARNING: (conf: 0.75)
+DDANGER AREA (conf: 0.43)
+DO NOT ENTER. (conf: 0.86)
+EXTREME CAUTION ADVISED. (conf: 0.71)
+AUTHORIZED PI (conf: 0.65)
+RSONNEL ONLY: (conf: 0.95)
+
+=== PREPROCESSED OCR ===
+WARNING: (conf: 1.00)
+KEIP CLEAR_ (conf: 0.55)
+DO NOT ENTER: (conf: 0.98)
+EXTREME CAUTION ADVISED_ (conf: 0.95)
+AUTHORIZED PFRSONNEL ONLY: (conf: 0.74)

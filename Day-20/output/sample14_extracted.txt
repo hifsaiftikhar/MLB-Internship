@@ -1,0 +1,9 @@
+=== RAW OCR: sample14.jpg ===
+MMAHINE (conf: 0.32)
+CREATE (conf: 0.84)
+ABHIEVE (conf: 0.93)
+
+=== PREPROCESSED OCR ===
+IMAGINE (conf: 0.92)
+CREATF (conf: 0.53)
+ABHIEVE (conf: 0.81)

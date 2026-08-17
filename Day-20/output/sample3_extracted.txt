@@ -1,0 +1,21 @@
+=== RAW OCR: sample3.jpg ===
+A34 SOUTH (conf: 0.99)
+Southampton (conf: 1.00)
+25 (conf: 1.00)
+Winchester (conf: 0.72)
+12 (conf: 0.80)
+M3 (conf: 1.00)
+London (conf: 1.00)
+Basingstoke (conf: 0.92)
+A31 (conf: 1.00)
+Alton (conf: 1.00)
+
+=== PREPROCESSED OCR ===
+A34 SOUTH (conf: 0.68)
+Southampton (conf: 1.00)
+25 (conf: 1.00)
+Winchester (conf: 1.00)
+12 (conf: 1.00)
+M3 (conf: 1.00)
+London / Basingstoke (conf: 0.97)
+A31 Alton (conf: 0.99)
