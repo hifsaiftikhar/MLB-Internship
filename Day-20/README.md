@@ -1,4 +1,3 @@
-```
 # Day-20: OCR Document Reader
 
 ## What is OCR?
@@ -64,4 +63,3 @@ python app.py
 
 ## Author
 Hifsa Iftikhar
-```
