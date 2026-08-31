@@ -1,4 +1,3 @@
-````
 # 📚 BookVision AI – Day 24
 
 A custom book detection application built using **YOLO11n** and **Streamlit**.
@@ -65,5 +64,4 @@ Day-24/
 ├── original_images/
 ├── dataset/
 └── scripts/
-```
 
