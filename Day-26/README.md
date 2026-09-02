@@ -17,6 +17,16 @@ The API provides:
 - Image validation and error handling
 - Swagger UI for API testing
 
+## Public API
+
+The API is publicly accessible through ngrok:
+
+**Base URL:**  
+https://lushly-sputter-uneasily.ngrok-free.dev/
+
+**Swagger Documentation:**  
+https://lushly-sputter-uneasily.ngrok-free.dev/docs
+
 ## Tech Stack
 
 - Python
