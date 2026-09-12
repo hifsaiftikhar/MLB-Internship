@@ -1,0 +1,8 @@
+﻿.env
+__pycache__/
+*.pyc
+models/
+uploads/
+outputs/
+logs/
+*.db
